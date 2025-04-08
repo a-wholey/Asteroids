@@ -12,6 +12,7 @@ def main():
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("Monospace", 32)
     score = 0
+    lives = 3
     dt = 0
     
     updatable = pygame.sprite.Group()
@@ -38,6 +39,10 @@ def main():
         #Adding Score
         score_text = font.render("Score: " + str(score), True, "White")
         screen.blit(score_text, (10,10))
+
+        #Adding Lives
+        lives_text = font.render("Lives:" + str(lives), True, "White")
+        screen.blit(lives_text, (1000, 10))
     
         #Updating Positions of Objects
         updatable.update(dt)
@@ -53,8 +58,11 @@ def main():
         #Checking Collisions
         for asteroid in asteroids:
             if player.check_collision(asteroid):
-                print(f"Game over! Score: {score}")
-                sys.exit()
+                if lives == 0:
+                    print(f"Game over! Score: {score}")
+                    sys.exit()
+                lives -= 1
+                asteroid.kill()
         
         #Drawing Objects
         for obj in drawable:
